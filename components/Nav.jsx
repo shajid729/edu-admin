@@ -5,7 +5,7 @@ import {Menu as MenuIcon} from '@mui/icons-material';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const Nav = () => {
+const Nav = ({setActiveNav}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -25,7 +25,7 @@ const Nav = () => {
   };
 
   return (
-    <AppBar position="sticky" top='0' className='bg-white shadow py-[10px] w-full'>
+    <AppBar position="sticky" top='0' sx={{boxShadow:'0 1px 3px 0 rgb(0 0 0 / 0.1)', bgcolor: 'white'}} className='py-[10px] w-full'>
       <Container maxWidth="xl">
         <Toolbar sx={{justifyContent: 'flex-end'}} disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -34,16 +34,17 @@ const Nav = () => {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
+              onClick={()=>setActiveNav({left: true})}
+              sx={{bgcolor:'none', borderColor:'#000'}}
+              className='bord border-red-500'
             >
-              <MenuIcon />
+              <MenuIcon sx={{color:'black'}} />
             </IconButton>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Sharp" src="/static/images/avatar/2.jpg" className='bg-gray-400' />
+                <Avatar alt="Sharp" src="#" sx={{bgcolor:'gray'}} />
               </IconButton>
             </Tooltip>
             <Menu
