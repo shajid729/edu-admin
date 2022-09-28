@@ -52,16 +52,16 @@ export default NextAuth({
                             const user = await User.findOne({ email })
                             if (user && user.verified == true) {
                                 throw new Error("User already exist")
-                            } else if (user && user.verified != false) {
+                            } else if (user && user.verified == false) {
                                 const otp = genOtp()
                                 await user.update({ token: otp })
                                 await sendEmail({ userEmail: email, subject: 'Verify your account', otp })
-                                return 'A OTP has send to your gmail'
+                                return true
                             } else {
                                 const otp = genOtp()
-                                await User.create({ name, email, password: hashPassword, role: 'user', verified: false, token: otp })
+                                await User.create({ name, email, password: hashPassword, verified: false, token: otp })
                                 await sendEmail({ userEmail: email, subject: 'Verify your account', otp })
-                                return 'A OTP has send to your gmail'
+                                return true
                             }
                         } catch (err) {
                             throw new Error(err.message)
@@ -95,10 +95,14 @@ export default NextAuth({
     },
     callbacks: {
         async session({ session, user, token }) {
-            // console.log('Session', {session, user, token});
-            session.user._id = token._id
-            session.user.role = token.role
-            return session
+            if (token.name) {
+                // console.log('Session', { session, user, token });
+                session.user._id = token._id
+                session.user.role = token.role
+                return session
+            }else{
+                return null
+            }
         },
         async jwt({ token, user, account, profile, isNewUser }) {
             if (user && user._id) {

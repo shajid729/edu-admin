@@ -11,7 +11,7 @@ const handler = async (req, res) => {
     try {
         await dbConnect()
         const { id } = req.query
-        console.log(id);
+        // console.log(id);
         if (id) {
             try {
                 const post = await Post.findById({ _id: id }).populate({ path: 'user', select: ['name', 'email', 'profile'] })

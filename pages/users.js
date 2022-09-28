@@ -8,8 +8,8 @@ export default function Users() {
   if (status == 'unauthenticated') {
     router.push('/login')
   }
-  
-  else if(status == 'authenticated') {
+
+  else if (status == 'authenticated' && session?.user?.name) {
     return (
       <>
         <h1>Users</h1>
@@ -29,6 +29,13 @@ export const getServerSideProps = async (context) => {
   if (session?.user?.name) {
     return {
       props: {}
+    }
+  } else if (session?.user?.name && session?.user.role == 'user') {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/wait`
+      }
     }
   } else {
     return {

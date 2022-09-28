@@ -15,6 +15,11 @@ a {
   box-sizing: border-box;
 }
 
+#nprogress .spinner-icon,
+#nprogress .spinner{
+  display: none !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

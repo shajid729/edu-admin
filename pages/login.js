@@ -46,56 +46,57 @@ const login = () => {
     }
   }
 
-  if (status == 'authenticated') {
+  if (status == 'authenticated' && session?.user?.name) {
     router.push('/')
   }
 
-  if (status == 'unauthenticated') {
+  if (status == 'loading') {
     return (
-      <>
-        <Box className='min-h-[100vh] w-full flex  flex-col items-center justify-center'>
-          <Box className='max-w-[600px] w-full'>
-            <h1 className='text-center font-semibold text-4xl'>Login</h1>
-            <form onSubmit={handleSubmit} className='flex flex-col w-full p-8 border border-gray-300 mt-8 rounded' autoComplete="off">
-              <TextField
-                variant='outlined'
-                label='Email'
-                type='email'
-                name='email'
-                value={value.email}
-                onChange={handleChange}
-                className='w-full'
-                sx={{ marginTop: '2rem' }}
-              />
-              <TextField
-                variant='outlined'
-                label='Password'
-                type='password'
-                name='password'
-                value={value.password}
-                onChange={handleChange}
-                className='w-full'
-                sx={{ marginTop: '2rem' }}
-              />
-              <Button
-                variant='contained'
-                type='submit'
-                className='w-full transition'
-                sx={{ marginTop: '2rem', bgcolor:'#5772ff' ,padding:'8px 12px', '&:hover':{bgcolor:'#4b65e8'} }}
-              >
-                Submit
-              </Button>
-              <p className='text-center mt-4'>Dont have an account ? <Link href='/signup'><a className='text-blue-600 underline'>Sign Up</a></Link></p>
-            </form>
-          </Box>
-        </Box>
-      </>
+      <h1 className='text-center text-4xl font-semibold'>Loading...</h1>
     )
   }
-
+  
   return (
-    <h1 className='text-center text-4xl font-semibold'>Loading...</h1>
+    <>
+      <Box className='min-h-[100vh] w-full flex  flex-col items-center justify-center'>
+        <Box className='max-w-[600px] w-full'>
+          <h1 className='text-center font-semibold text-4xl'>Login</h1>
+          <form onSubmit={handleSubmit} className='flex flex-col w-full p-8 border border-gray-300 mt-8 rounded' autoComplete="off">
+            <TextField
+              variant='outlined'
+              label='Email'
+              type='email'
+              name='email'
+              value={value.email}
+              onChange={handleChange}
+              className='w-full'
+              sx={{ marginTop: '2rem' }}
+            />
+            <TextField
+              variant='outlined'
+              label='Password'
+              type='password'
+              name='password'
+              value={value.password}
+              onChange={handleChange}
+              className='w-full'
+              sx={{ marginTop: '2rem' }}
+            />
+            <Button
+              variant='contained'
+              type='submit'
+              className='w-full transition'
+              sx={{ marginTop: '2rem', bgcolor: '#5772ff', padding: '8px 12px', '&:hover': { bgcolor: '#4b65e8' } }}
+            >
+              Submit
+            </Button>
+            <p className='text-center mt-4'>Dont have an account ? <Link href='/signup'><a className='text-blue-600 underline'>Sign Up</a></Link></p>
+          </form>
+        </Box>
+      </Box>
+    </>
   )
+
 }
 
 export default login
@@ -103,10 +104,16 @@ export default login
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
-  // console.log(session);
   if (!session?.user?.name) {
     return {
       props: {}
+    }
+  } else if (session?.user?.name && session?.user.role == 'user') {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/wait`
+      }
     }
   } else {
     return {
