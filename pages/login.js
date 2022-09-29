@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { signIn, getSession, useSession } from 'next-auth/react'
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const Login = () => {
   const router = useRouter()
@@ -58,6 +59,7 @@ const Login = () => {
   
   return (
     <>
+      <LoadingOverlay overlay={active}/>
       <Box className='min-h-[100vh] w-full flex  flex-col items-center justify-center'>
         <Box className='max-w-[600px] w-full'>
           <h1 className='text-center font-semibold text-4xl'>Login</h1>

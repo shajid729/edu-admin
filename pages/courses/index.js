@@ -31,7 +31,7 @@ export default function Courses() {
             renderInput={(params) => <TextField size="small" {...params} label="Class" />}
           />
           <Autocomplete
-            options={ filter.class? (filter.class == 'SSC' ? SSubject : HSubject) : []}
+            options={filter.class ? (filter.class == 'SSC' ? SSubject : HSubject) : []}
             size="small"
             sx={{ width: 170, margin: '10px 10px 0 0' }}
             value={filter.subject}
@@ -80,17 +80,17 @@ const Class = [
 ]
 
 const HSubject = [
-  {label: 'Physics 1st', value: 'phsics1'},
-  {label: 'Physics 2nd', value: 'phsics2'},
-  {label: 'Chemistry 1st', value: 'chemestry1'},
-  {label: 'Chemistry 2nd', value: 'chemestry2'},
-  {label: 'Higher Math 1st', value: 'hmath1'},
-  {label: 'Higher Math 2nd', value: 'hmath2'},
+  { label: 'Physics 1st', value: 'phsics1' },
+  { label: 'Physics 2nd', value: 'phsics2' },
+  { label: 'Chemistry 1st', value: 'chemestry1' },
+  { label: 'Chemistry 2nd', value: 'chemestry2' },
+  { label: 'Higher Math 1st', value: 'hmath1' },
+  { label: 'Higher Math 2nd', value: 'hmath2' },
 ]
 
 const SSubject = [
-  {label: 'Physics', value: 'phsics'},
-  {label: 'Chemistry', value: 'chemestry'},
-  {label: 'Math', value: 'math'},
-  {label: 'Higher Math', value: 'hmath'},
+  { label: 'Physics', value: 'phsics' },
+  { label: 'Chemistry', value: 'chemestry' },
+  { label: 'Math', value: 'math' },
+  { label: 'Higher Math', value: 'hmath' },
 ]
