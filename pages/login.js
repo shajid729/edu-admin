@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { signIn, getSession, useSession } from 'next-auth/react'
 
-const login = () => {
+const Login = () => {
   const router = useRouter()
   const [value, setValue] = useState({ email: '', password: '' })
   const [active, setActive] = useState(false)
@@ -99,7 +99,7 @@ const login = () => {
 
 }
 
-export default login
+export default Login
 
 
 export const getServerSideProps = async (context) => {
