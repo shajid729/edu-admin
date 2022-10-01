@@ -13,6 +13,7 @@ export default function Create() {
   const router = useRouter()
   const YOUTUBE_LINK = 'https://www.googleapis.com/youtube/v3/playlistItems'
   const YOUTUBE_PLAYLIST_ID = 'PLubWB9tWo5lVAdd2bXEW3Tgn99tcxzDbt'
+  const YOUTUBE_API_KEY="AIzaSyDdDXDjUrRH7hqkR285glv6a_i02KRGFNk"
 
   const handleNext = async () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -30,7 +31,7 @@ export default function Create() {
 
   const handlePlaylistIdSubmit = async () => {
 
-    const res = await fetch(`${YOUTUBE_LINK}?part=snippet&playlistId=${playlistId}&maxResults=50&key=${process.env.YOUTUBE_API_KEY}`)
+    const res = await fetch(`${YOUTUBE_LINK}?part=snippet&playlistId=${playlistId}&maxResults=50&key=${YOUTUBE_API_KEY}`)
     const data = await res.json()
     if (data?.items) {
       handleNext()
