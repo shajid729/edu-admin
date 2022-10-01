@@ -30,7 +30,7 @@ export default function Create() {
 
   const handlePlaylistIdSubmit = async () => {
 
-    const res = await fetch(`${YOUTUBE_LINK}?part=snippet&playlistId=${playlistId}&maxResults=50&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}`)
+    const res = await fetch(`${YOUTUBE_LINK}?part=snippet&playlistId=${playlistId}&maxResults=50&key=${process.env.YOUTUBE_API_KEY}`)
     const data = await res.json()
     if (data?.items) {
       handleNext()
