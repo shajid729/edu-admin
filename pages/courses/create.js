@@ -79,7 +79,7 @@ export default function Create() {
         ) : (
           <Box sx={{ margin: '2rem auto' }}>
             <Box>
-              {courseData.image && <BlurImage image={'https://i.ytimg.com/vi/CNNkrvV_JaM/hqdefault.jpg'} />}
+              {courseData.image && <BlurImage image={courseData.image} />}
             </Box>
             <TextField
               label='Course Thumbnail'
