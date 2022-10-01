@@ -14,7 +14,18 @@ const Layout = ({ children, data }) => {
     if(status == 'authenticated' && !session?.user?.name){
       signOut({ redirect: false })
     }
+
   },[])
+
+  useEffect(()=>{
+    if(status == 'authenticated' && session?.user?.name){
+      fetch(`/api/wait?id=${session?.user?._id}`)
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.message!==session?.user?.role)signOut({redirect:false})
+      })
+    }
+  },[session?.user?.role])
 
   if (status !== 'loading') {
     return (

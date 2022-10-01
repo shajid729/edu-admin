@@ -51,53 +51,54 @@ const Login = () => {
     router.push('/')
   }
 
-  if (status == 'loading') {
+  if (status == 'unauthenticated') {
     return (
-      <h1 className='text-center text-4xl font-semibold'>Loading...</h1>
+      <>
+        <LoadingOverlay overlay={active}/>
+        <Box className='min-h-[100vh] w-full flex  flex-col items-center justify-center'>
+          <Box className='max-w-[600px] w-full'>
+            <h1 className='text-center font-semibold text-4xl'>Login</h1>
+            <form onSubmit={handleSubmit} className='flex flex-col w-full p-8 border border-gray-300 mt-8 rounded' autoComplete="off">
+              <TextField
+                variant='outlined'
+                label='Email'
+                type='email'
+                name='email'
+                value={value.email}
+                onChange={handleChange}
+                className='w-full'
+                sx={{ marginTop: '2rem' }}
+              />
+              <TextField
+                variant='outlined'
+                label='Password'
+                type='password'
+                name='password'
+                value={value.password}
+                onChange={handleChange}
+                className='w-full'
+                sx={{ marginTop: '2rem' }}
+              />
+              <Button
+                variant='contained'
+                type='submit'
+                className='w-full transition'
+                sx={{ marginTop: '2rem', bgcolor: '#5772ff', padding: '8px 12px', '&:hover': { bgcolor: '#4b65e8' } }}
+              >
+                Submit
+              </Button>
+              <p className='text-center mt-4'>Dont have an account ? <Link href='/signup'><a className='text-blue-600 underline'>Sign Up</a></Link></p>
+            </form>
+          </Box>
+        </Box>
+      </>
     )
   }
-  
+
   return (
-    <>
-      <LoadingOverlay overlay={active}/>
-      <Box className='min-h-[100vh] w-full flex  flex-col items-center justify-center'>
-        <Box className='max-w-[600px] w-full'>
-          <h1 className='text-center font-semibold text-4xl'>Login</h1>
-          <form onSubmit={handleSubmit} className='flex flex-col w-full p-8 border border-gray-300 mt-8 rounded' autoComplete="off">
-            <TextField
-              variant='outlined'
-              label='Email'
-              type='email'
-              name='email'
-              value={value.email}
-              onChange={handleChange}
-              className='w-full'
-              sx={{ marginTop: '2rem' }}
-            />
-            <TextField
-              variant='outlined'
-              label='Password'
-              type='password'
-              name='password'
-              value={value.password}
-              onChange={handleChange}
-              className='w-full'
-              sx={{ marginTop: '2rem' }}
-            />
-            <Button
-              variant='contained'
-              type='submit'
-              className='w-full transition'
-              sx={{ marginTop: '2rem', bgcolor: '#5772ff', padding: '8px 12px', '&:hover': { bgcolor: '#4b65e8' } }}
-            >
-              Submit
-            </Button>
-            <p className='text-center mt-4'>Dont have an account ? <Link href='/signup'><a className='text-blue-600 underline'>Sign Up</a></Link></p>
-          </form>
-        </Box>
-      </Box>
-    </>
+    <h1 className='text-center text-4xl font-semibold'>Loading...</h1>
   )
+  
 
 }
 

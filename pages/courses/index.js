@@ -1,4 +1,5 @@
-import { Autocomplete, Box, Button, TextField } from '@mui/material';
+import { Edit } from '@mui/icons-material';
+import { Autocomplete, Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, useMediaQuery } from '@mui/material';
 import { getSession, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -6,7 +7,8 @@ import { useState } from 'react';
 export default function Courses() {
   const router = useRouter()
   const { data: session, status } = useSession()
-  const [filter, setFilter] = useState({ class: '', subject: '' })
+  const [filter, setFilter] = useState({ class: '', subject: '', value: '' })
+  const isMobile = useMediaQuery('(max-width:1000px)')
 
   filter.subject && console.log(filter);
 
@@ -19,7 +21,7 @@ export default function Courses() {
       <>
         <Box className='flex justify-between items-center my-4'>
           <h1 className='font-semibold text-2xl'>Courses</h1>
-          <Button variant='contained' size={'medium'} sx={{ bgcolor: '#5848ff', '&:hover': { bgcolor: '#4032dd' } }}>+ Add New</Button>
+          <Button onClick={() => router.push('/courses/create')} variant='contained' size={'medium'} sx={{ bgcolor: '#5848ff', '&:hover': { bgcolor: '#4032dd' } }}>+ Add New</Button>
         </Box>
         <Box className='flex flex-wrap'>
           <Autocomplete
@@ -27,7 +29,7 @@ export default function Courses() {
             size="small"
             sx={{ width: 150, margin: '10px 10px 0 0' }}
             value={filter.class}
-            onChange={(e, v) => setFilter({ ...filter, class: v })}
+            onChange={(e, v) => setFilter({ subject: '', value: '', class: v })}
             renderInput={(params) => <TextField size="small" {...params} label="Class" />}
           />
           <Autocomplete
@@ -35,10 +37,52 @@ export default function Courses() {
             size="small"
             sx={{ width: 170, margin: '10px 10px 0 0' }}
             value={filter.subject}
-            onChange={(e, v) => setFilter({ ...filter, subject: v.value })}
+            onChange={(e, v) => setFilter({ ...filter, subject: v?.label, value: v?.value })}
             renderInput={(params) => <TextField size="small" {...params} label="Subject" />}
           />
         </Box>
+        {/* Courses Section */}
+        <div className={`${!isMobile ? 'max-w-[80vw]' : 'max-w-[90vw]'} m-auto`}>
+          <div className='w-[100%] overflow-x-auto my-4'>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: { md: '600px', xs: '800px' } }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Image</TableCell>
+                    <TableCell align="center">Title</TableCell>
+                    <TableCell align="center">Class</TableCell>
+                    <TableCell align="center">Subject</TableCell>
+                    <TableCell align="center">Chapter</TableCell>
+                    <TableCell align="center">Date</TableCell>
+                    <TableCell align="center">Activity</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow
+                      key={row.name}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell align="center">
+                        <Box className='w-[130px] max-h-full aspect-video bg-gray-500 rounded mx-auto'>{row.image}</Box>
+                      </TableCell>
+                      <TableCell align="center" sx={{ maxWidth: '300px' }}>{row.title}</TableCell>
+                      <TableCell align="center">{row.class}</TableCell>
+                      <TableCell align="center">{row.subject}</TableCell>
+                      <TableCell align="center">{row.chapter}</TableCell>
+                      <TableCell align="center">{row.date}</TableCell>
+                      <TableCell align="center">
+                        <IconButton>
+                          <Edit />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        </div>
       </>
     )
   }
@@ -72,6 +116,33 @@ export const getServerSideProps = async (context) => {
     }
   }
 }
+
+const rows = [
+  {
+    image: '',
+    title: 'Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics ',
+    class: 'HSC',
+    subject: 'Physics 1st',
+    chapter: '1',
+    date: '18/04/2022'
+  },
+  {
+    image: '',
+    title: 'Newtonian Mecahni',
+    class: 'HSC',
+    subject: 'Physics 1st',
+    chapter: '1',
+    date: '18/04/2022'
+  },
+  {
+    image: '',
+    title: 'Newtonian Mecahni',
+    class: 'HSC',
+    subject: 'Physics 1st',
+    chapter: '1',
+    date: '18/04/2022'
+  },
+];
 
 const Class = [
   'HSC',

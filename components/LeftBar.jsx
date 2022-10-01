@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 
 const LeftBar = ({ activeNav, setActiveNav }) => {
     const router = useRouter()
-    const isMobile = useMediaQuery('(max-width:900px)')
+    const isMobile = useMediaQuery('(max-width:1000px)')
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -26,7 +26,7 @@ const LeftBar = ({ activeNav, setActiveNav }) => {
                         open={activeNav.left}
                         onClose={toggleDrawer(false)}
                         sx={{
-                            display: { xs: 'block', md: 'none' },
+                            display: 'block',
                             '& .MuiDrawer-paper': { boxSizing: 'border-box', maxWidth: '280px', width: '100%' },
                         }}
                     >
