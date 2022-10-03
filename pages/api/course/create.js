@@ -1,12 +1,6 @@
 import dbConnect from '../../../lib/db'
 import Course from '../../../models/courseSchema'
 
-// export const config = {
-//     api: {
-//         bodyParser: false,
-//     },
-// }
-
 const CreateCourse = async (req, res) => {
     await dbConnect()
 
