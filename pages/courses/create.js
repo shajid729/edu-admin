@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import { Autocomplete, TextField, Button, StepLabel, Step, Stepper, Box } from '@mui/material';
+import { Autocomplete, TextField, Button, StepLabel, Step, Stepper, Box, Stack, Paper } from '@mui/material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 const steps = ['Add Playlist ID', 'Create Course'];
+
+const PaperComponent = ({ children }) => (
+  <Paper style={{ position: 'absolute', bottom: '60px', background: 'white', width: '100%', border: '1px solid #00000060', boxShadow: '0 -5px 8px #00000010' }}>{children}</Paper>
+)
 
 export default function Create() {
   const [activeStep, setActiveStep] = useState(0);
   const [playlistId, setPlaylistId] = useState('')
   const [errorPlaylistId, setErrorPlaylistId] = useState("")
-  const [courseData, setCourseData] = useState({ image: '', total: '', class: '', subject: '', subValue: '' })
+  const [courseData, setCourseData] = useState({ image: '', total: '', class: '', subject: '', subValue: '', chapter: '', title: '', category: '' })
   const router = useRouter()
   const YOUTUBE_LINK = 'https://www.googleapis.com/youtube/v3/playlistItems'
-  const YOUTUBE_PLAYLIST_ID = 'PLubWB9tWo5lVAdd2bXEW3Tgn99tcxzDbt'
   const YOUTUBE_API_KEY = "AIzaSyDdDXDjUrRH7hqkR285glv6a_i02KRGFNk"
 
   const handleNext = async () => {
@@ -20,8 +24,10 @@ export default function Create() {
   };
 
   const handleReset = () => {
-    setCourseData({ image: '', total: '', class: '', subject: '', subValue: '', category:'' })
-    setPlaylistId('')
+    setTimeout(() => {
+      setCourseData({ image: '', total: '', class: '', subject: '', subValue: '', category: '' })
+      setPlaylistId('')
+    }, 1500)
   }
 
   const handleCancel = () => {
@@ -38,118 +44,170 @@ export default function Create() {
       const content = {
         total: data?.items?.length,
         thumb: data?.items[0]?.snippet?.thumbnails.high.url,
+        title: data?.items[0]?.snippet.title
       }
-      setCourseData({ ...courseData, total: content.total, image: content.thumb })
+      setCourseData({ ...courseData, total: content.total, image: content.thumb, title: content.title })
     } else {
       setErrorPlaylistId("Invalid PlaylisId")
     }
   }
 
-  const handleCourseSubmit = () => {
-    console.log({playlistId, ...courseData})
+  const handleCourseSubmit = async () => {
+    const toastId = toast.loading('Loading...')
+    const res = await fetch('/api/course/create', {
+      method: 'POST',
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({ playlistId, ...courseData })
+    })
+    const data = await res.json()
+    if (res.ok) {
+      toast.dismiss(toastId)
+      toast.success(data.message)
+      router.push('/courses')
+      handleReset()
+    } else {
+      toast.dismiss(toastId)
+      toast.error(data.error)
+    }
   }
 
   return (
-    <Box sx={{ maxWidth: '700px', width: '100%', margin: '2rem auto' }}>
-      <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => {
-          return (
-            <Step key={label} >
-              <StepLabel sx={{ display: 'grid', placeItems: 'center', gridGap: '8px' }}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {
-        activeStep == 0 ? (
-          <Box sx={{ margin: '2rem auto' }}>
-            <TextField
-              label='Playlist ID'
-              width='100%'
-              sx={{ width: '100%', margin: '1rem auto' }}
-              onChange={(e) => {
-                setPlaylistId(e.target.value)
-                setErrorPlaylistId('')
-              }}
-              value={playlistId}
-              helperText={errorPlaylistId}
-              error={errorPlaylistId ? true : false}
-            />
-          </Box>
-        ) : (
-          <Box sx={{ margin: '2rem auto' }}>
-            <Box>
-              {courseData.image && <BlurImage image={courseData.image} />}
+    <>
+      <Box sx={{ maxWidth: '700px', width: '100%', margin: '2rem auto' }}>
+        <Stepper activeStep={activeStep}>
+          {steps.map((label, index) => {
+            return (
+              <Step key={label} >
+                <StepLabel sx={{ display: 'grid', placeItems: 'center', gridGap: '8px' }}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        {
+          activeStep == 0 ? (
+            <Box sx={{ margin: '2rem auto' }}>
+              <TextField
+                label='Playlist ID'
+                width='100%'
+                sx={{ width: '100%', margin: '1rem auto' }}
+                onChange={(e) => {
+                  setPlaylistId(e.target.value)
+                  setErrorPlaylistId('')
+                }}
+                value={playlistId}
+                helperText={errorPlaylistId}
+                error={errorPlaylistId ? true : false}
+              />
             </Box>
-            <TextField
-              label='Course Thumbnail'
-              width='100%'
-              sx={{ width: '100%', margin: '1rem auto' }}
-              disabled
-              onChange={(e) => setCourseData({ ...courseData })}
-              value={courseData.image}
-            />
-            <TextField
-              label='Total Video'
-              width='100%'
-              sx={{ width: '100%', margin: '1rem auto' }}
-              disabled
-              onChange={(e) => setCourseData({ ...courseData })}
-              value={courseData.total}
-            />
-            <Autocomplete
-              options={Class}
-              sx={{ width: '100%', margin: '1rem auto' }}
-              value={courseData.class}
-              onChange={(e, v) => setCourseData({ ...courseData, subject: '', subValue: '', class: v })}
-              renderInput={(params) => <TextField size="small" {...params} label="Class" />}
-            />
-            <Autocomplete
-              options={courseData.class ? (courseData.class == 'SSC' ? SSubject : HSubject) : []}
-              sx={{ width: '100%', margin: '2rem auto' }}
-              value={courseData.subject}
-              onChange={(e, v) => setCourseData({ ...courseData, subject: v?.label, subValue: v?.value })}
-              renderInput={(params) => <TextField size="small" {...params} label="Subject" />}
-            />
-            <Autocomplete
-              options={Category}
-              sx={{ width: '100%', margin: '2rem auto' }}
-              value={courseData.category}
-              onChange={(e, v) => setCourseData({ ...courseData, category:v })}
-              renderInput={(params) => <TextField size="small" {...params} label="Category" />}
-            />
-          </Box>
-        )
-      }
+          ) : (
+            <Box sx={{ margin: '2rem auto' }}>
+              <Box>
+                {courseData.image && <BlurImage image={courseData.image} />}
+              </Box>
+              <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
+                <TextField
+                  label='Course Thumbnail'
+                  width='100%'
+                  sx={{ width: '100%' }}
+                  disabled
+                  onChange={(e) => setCourseData({ ...courseData })}
+                  value={courseData.image}
+                />
+              </div>
+              <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
+                <TextField
+                  label='Title'
+                  width='100%'
+                  sx={{ width: '100%' }}
+                  disabled
+                  onChange={(e) => setCourseData({ ...courseData })}
+                  value={courseData.title}
+                />
+              </div>
+              <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
+                <TextField
+                  label='Total Video'
+                  width='100%'
+                  sx={{ width: '100%' }}
+                  disabled
+                  onChange={(e) => setCourseData({ ...courseData })}
+                  value={courseData.total}
+                />
+              </div>
+              <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
+                <Autocomplete
+                  options={Class}
+                  sx={{ width: '100%' }}
+                  value={courseData.class}
+                  onChange={(e, v) => setCourseData({ ...courseData, subject: '', subValue: '', class: v })}
+                  renderInput={(params) => <TextField size="small" {...params} label="Class" />}
+                  PaperComponent={PaperComponent}
+                />
+              </div>
+              <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
+                <Autocomplete
+                  options={courseData.class ? (courseData.class == 'SSC' ? SSubject : HSubject) : []}
+                  sx={{ width: '100%' }}
+                  value={courseData.subject}
+                  onChange={(e, v) => setCourseData({ ...courseData, subject: v?.label, subValue: v?.value })}
+                  renderInput={(params) => <TextField size="small" {...params} label="Subject" />}
+                  PaperComponent={PaperComponent}
+                />
+              </div>
+              <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
+                <TextField
+                  label='Chatpter'
+                  width='100%'
+                  sx={{ width: '100%', }}
+                  onChange={(e) => setCourseData({ ...courseData, chapter: e.target.value })}
+                  value={courseData.chapter}
+                />
+              </div>
+              <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
+                <Autocomplete
+                  options={Category}
+                  sx={{ width: '100%' }}
+                  value={courseData.category}
+                  onChange={(e, v) => setCourseData({ ...courseData, category: v })}
+                  renderInput={(params) => <TextField size="small" {...params} label="Category" />}
+                  PaperComponent={PaperComponent}
+                />
+              </div>
+            </Box>
+          )
+        }
 
-      {/* Common Component for all steps */}
-      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-        <Button
-          color="inherit"
-          onClick={handleCancel}
-          variant='outlined'
-          sx={{ mr: 1 }}
-        >
-          Cancel
-        </Button>
-        <Box sx={{ flex: '1 1 auto' }} />
-        {activeStep === 0 ?
+        {/* Common Component for all steps */}
+        <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2 }}>
           <Button
-            onClick={handlePlaylistIdSubmit}
-            disabled={!playlistId}
-            variant='contained'
+            color="inherit"
+            onClick={handleCancel}
+            variant='outlined'
+            sx={{ mr: 1 }}
           >
-            Next
-          </Button> :
-          <Button
-            onClick={handleCourseSubmit}
-            disabled={!courseData.image || !courseData.class || !courseData.subject}
-            variant='contained'
-          >
-            Submit
-          </Button>}
+            Cancel
+          </Button>
+          <Box sx={{ flex: '1 1 auto' }} />
+          {activeStep === 0 ?
+            <Button
+              onClick={handlePlaylistIdSubmit}
+              disabled={!playlistId}
+              variant='contained'
+            >
+              Next
+            </Button> :
+            <Button
+              onClick={handleCourseSubmit}
+              disabled={!courseData.image || !courseData.class || !courseData.subject || !courseData.chapter}
+              variant='contained'
+            >
+              Submit
+            </Button>}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
 
@@ -179,6 +237,18 @@ const Category = [
 ]
 
 const HSubject = [
+  { label: 'Physics 1st', value: 'phsics1' },
+  { label: 'Physics 2nd', value: 'phsics2' },
+  { label: 'Chemistry 1st', value: 'chemestry1' },
+  { label: 'Chemistry 2nd', value: 'chemestry2' },
+  { label: 'Higher Math 1st', value: 'hmath1' },
+  { label: 'Higher Math 2nd', value: 'hmath2' },
+  { label: 'Physics 1st', value: 'phsics1' },
+  { label: 'Physics 2nd', value: 'phsics2' },
+  { label: 'Chemistry 1st', value: 'chemestry1' },
+  { label: 'Chemistry 2nd', value: 'chemestry2' },
+  { label: 'Higher Math 1st', value: 'hmath1' },
+  { label: 'Higher Math 2nd', value: 'hmath2' },
   { label: 'Physics 1st', value: 'phsics1' },
   { label: 'Physics 2nd', value: 'phsics2' },
   { label: 'Chemistry 1st', value: 'chemestry1' },

@@ -3,14 +3,13 @@ import { Autocomplete, Box, Button, IconButton, Paper, Table, TableBody, TableCe
 import { getSession, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import Moment from 'react-moment';
 
-export default function Courses() {
+export default function Courses({courses}) {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [filter, setFilter] = useState({ class: '', subject: '', value: '' })
   const isMobile = useMediaQuery('(max-width:1000px)')
-
-  filter.subject && console.log(filter);
 
   if (status == 'unauthenticated') {
     router.push('/login')
@@ -45,7 +44,7 @@ export default function Courses() {
         <div className={`${!isMobile ? 'max-w-[80vw]' : 'max-w-[90vw]'} m-auto`}>
           <div className='w-[100%] overflow-x-auto my-4'>
             <TableContainer component={Paper}>
-              <Table sx={{ minWidth: { md: '600px', xs: '800px' } }}>
+              <Table sx={{ minWidth: { md: '700px', xs: '900px' } }}>
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Image</TableCell>
@@ -53,24 +52,31 @@ export default function Courses() {
                     <TableCell align="center">Class</TableCell>
                     <TableCell align="center">Subject</TableCell>
                     <TableCell align="center">Chapter</TableCell>
+                    <TableCell align="center">Category</TableCell>
                     <TableCell align="center">Date</TableCell>
                     <TableCell align="center">Activity</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {courses.map((row) => (
                     <TableRow
                       key={row.name}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell align="center">
-                        <Box className='w-[130px] max-h-full aspect-video bg-gray-500 rounded mx-auto'>{row.image}</Box>
+                        <Box className='w-[130px] flex justify-center items-center border  overflow-hidden max-h-full aspect-video bg-gray-500 rounded mx-auto'>
+                          <img
+                            src={row.image}
+                            alt={row.title}
+                          />
+                        </Box>
                       </TableCell>
                       <TableCell align="center" sx={{ maxWidth: '300px' }}>{row.title}</TableCell>
                       <TableCell align="center">{row.class}</TableCell>
                       <TableCell align="center">{row.subject}</TableCell>
                       <TableCell align="center">{row.chapter}</TableCell>
-                      <TableCell align="center">{row.date}</TableCell>
+                      <TableCell align="center">{row.category}</TableCell>
+                      <TableCell align="center"><Moment fromNow>{row.createdAt}</Moment></TableCell>
                       <TableCell align="center">
                         <IconButton>
                           <Edit />
@@ -95,10 +101,12 @@ export default function Courses() {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
-  // console.log(session);
+  const res =  await fetch("http://localhost:3000/api/course")
+  const data = await res.json()
+  
   if (session?.user?.name) {
     return {
-      props: {}
+      props: {courses:data.message}
     }
   } else if (session?.user?.name && session?.user.role == 'user') {
     return {
@@ -116,33 +124,6 @@ export const getServerSideProps = async (context) => {
     }
   }
 }
-
-const rows = [
-  {
-    image: '',
-    title: 'Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics Newtonian Mecahnics ',
-    class: 'HSC',
-    subject: 'Physics 1st',
-    chapter: '1',
-    date: '18/04/2022'
-  },
-  {
-    image: '',
-    title: 'Newtonian Mecahni',
-    class: 'HSC',
-    subject: 'Physics 1st',
-    chapter: '1',
-    date: '18/04/2022'
-  },
-  {
-    image: '',
-    title: 'Newtonian Mecahni',
-    class: 'HSC',
-    subject: 'Physics 1st',
-    chapter: '1',
-    date: '18/04/2022'
-  },
-];
 
 const Class = [
   'HSC',

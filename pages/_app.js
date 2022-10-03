@@ -14,6 +14,7 @@ function MyApp({ Component, pageProps }) {
           position="top-center"
           reverseOrder={false}
           gutter={12}
+          containerStyle={{position:'sticky'}}
         />
         <NextNProgress
           color="#7659ff"
