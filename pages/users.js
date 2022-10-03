@@ -92,7 +92,7 @@ export default function Users() {
         </Box>
         <div className={`${!isMobile ? 'max-w-[80vw]' : 'max-w-[90vw]'} m-auto`}>
           <div className='w-[100%] overflow-x-auto my-4'>
-            <TableContainer component={Paper}>
+            <TableContainer sx={{minWidth:'600px'}} component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
