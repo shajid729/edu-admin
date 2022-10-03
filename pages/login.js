@@ -54,7 +54,7 @@ const Login = () => {
   if (status == 'unauthenticated') {
     return (
       <>
-        <LoadingOverlay overlay={active}/>
+        <LoadingOverlay overlay={active} />
         <Box className='min-h-[100vh] w-full flex  flex-col items-center justify-center'>
           <Box className='max-w-[600px] w-full'>
             <h1 className='text-center font-semibold text-4xl'>Login</h1>
@@ -90,6 +90,15 @@ const Login = () => {
               <p className='text-center mt-4'>Dont have an account ? <Link href='/signup'><a className='text-blue-600 underline'>Sign Up</a></Link></p>
             </form>
           </Box>
+          <Box className='mt-5 p-4 border max-w-[600px] w-full text-center'>
+            <h1 className='font-semibold text-2xl mb-4'>Test User</h1>
+            <div className='text-lg'>
+              <span className='font-medium'>Email :</span> admin@gmail.com
+            </div>
+            <div className='text-lg'>
+              <span className='font-medium'>Password :</span> admin
+            </div>
+          </Box>
         </Box>
       </>
     )
@@ -98,7 +107,7 @@ const Login = () => {
   return (
     <h1 className='text-center text-4xl font-semibold'>Loading...</h1>
   )
-  
+
 
 }
 

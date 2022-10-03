@@ -3,6 +3,7 @@ import { Autocomplete, TextField, Button, StepLabel, Step, Stepper, Box, Stack, 
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react'
 
 const steps = ['Add Playlist ID', 'Create Course'];
 
@@ -11,6 +12,7 @@ const PaperComponent = ({ children }) => (
 )
 
 export default function Create() {
+  const { data: session } = useSession()
   const [activeStep, setActiveStep] = useState(0);
   const [playlistId, setPlaylistId] = useState('')
   const [errorPlaylistId, setErrorPlaylistId] = useState("")
@@ -59,7 +61,7 @@ export default function Create() {
       headers: {
         "Content-type": "application/json"
       },
-      body: JSON.stringify({ playlistId, ...courseData })
+      body: JSON.stringify({ playlistId, ...courseData, role: session?.user?.role })
     })
     const data = await res.json()
     if (res.ok) {

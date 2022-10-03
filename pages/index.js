@@ -13,7 +13,8 @@ export default function Home() {
   else if (status == 'authenticated' && session?.user?.name) {
     return (
       <>
-        <h1>Home</h1>
+        <h1 className='text-center font-semibold text-4xl mt-4'>👋 {session?.user?.name}</h1>
+        <h1 className='text-center font-semibold text-4xl mt-4'>Welcome to Edu-Admin Panel</h1>
       </>
     )
   }

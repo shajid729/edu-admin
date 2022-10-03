@@ -10,15 +10,8 @@ const Nav = ({setActiveNav}) => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const isMobile = useMediaQuery('(max-width:1000px)')
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
