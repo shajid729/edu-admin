@@ -13,14 +13,14 @@ export default function Create() {
   const router = useRouter()
   const YOUTUBE_LINK = 'https://www.googleapis.com/youtube/v3/playlistItems'
   const YOUTUBE_PLAYLIST_ID = 'PLubWB9tWo5lVAdd2bXEW3Tgn99tcxzDbt'
-  const YOUTUBE_API_KEY="AIzaSyDdDXDjUrRH7hqkR285glv6a_i02KRGFNk"
+  const YOUTUBE_API_KEY = "AIzaSyDdDXDjUrRH7hqkR285glv6a_i02KRGFNk"
 
   const handleNext = async () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleReset = () => {
-    setCourseData({ image: '', total: '', class: '', subject: '', subValue: '' })
+    setCourseData({ image: '', total: '', class: '', subject: '', subValue: '', category:'' })
     setPlaylistId('')
   }
 
@@ -46,7 +46,7 @@ export default function Create() {
   }
 
   const handleCourseSubmit = () => {
-    console.log(courseData)
+    console.log({playlistId, ...courseData})
   }
 
   return (
@@ -85,16 +85,17 @@ export default function Create() {
               label='Course Thumbnail'
               width='100%'
               sx={{ width: '100%', margin: '1rem auto' }}
-              onChange={(e) => setCourseData({ ...courseData, image: e.target.value })}
+              disabled
+              onChange={(e) => setCourseData({ ...courseData })}
               value={courseData.image}
             />
             <TextField
               label='Total Video'
               width='100%'
               sx={{ width: '100%', margin: '1rem auto' }}
+              disabled
               onChange={(e) => setCourseData({ ...courseData })}
               value={courseData.total}
-              disabled
             />
             <Autocomplete
               options={Class}
@@ -109,6 +110,13 @@ export default function Create() {
               value={courseData.subject}
               onChange={(e, v) => setCourseData({ ...courseData, subject: v?.label, subValue: v?.value })}
               renderInput={(params) => <TextField size="small" {...params} label="Subject" />}
+            />
+            <Autocomplete
+              options={Category}
+              sx={{ width: '100%', margin: '2rem auto' }}
+              value={courseData.category}
+              onChange={(e, v) => setCourseData({ ...courseData, category:v })}
+              renderInput={(params) => <TextField size="small" {...params} label="Category" />}
             />
           </Box>
         )
@@ -161,8 +169,13 @@ const BlurImage = ({ image }) => {
 
 const Class = [
   'HSC',
-  'Admission',
   'SSC',
+]
+
+const Category = [
+  'Basic',
+  'Advanced',
+  'Admission',
 ]
 
 const HSubject = [

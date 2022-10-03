@@ -146,7 +146,6 @@ const rows = [
 
 const Class = [
   'HSC',
-  'Admission',
   'SSC',
 ]
 
