@@ -9,6 +9,8 @@ const LeftBar = ({ activeNav, setActiveNav }) => {
     const router = useRouter()
     const isMobile = useMediaQuery('(max-width:1000px)')
 
+    const pathName = router.route.split("/")
+
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -100,7 +102,7 @@ const LeftBar = ({ activeNav, setActiveNav }) => {
                         <MenuList className='nav mt-5'>
                             <MenuItem sx={{ padding: '0', marginTop: '5px' }}>
                                 <Link href='/'>
-                                    <a className={`rounded block w-full h-full px-4 py-2 text-lg cursor-pointer ${router.route == '/' ? 'bg-gray-200' : 'hover:bg-gray-100'} transition`}>
+                                    <a className={`rounded block w-full h-full px-4 py-2 text-lg cursor-pointer ${pathName[1] == '' ? 'bg-gray-200' : 'hover:bg-gray-100'} transition`}>
                                         <AppShortcut className='w-[20px] text-gray-700' />
                                         <span className='ml-3'>App</span>
                                     </a>
@@ -108,7 +110,7 @@ const LeftBar = ({ activeNav, setActiveNav }) => {
                             </MenuItem>
                             <MenuItem sx={{ padding: '0', marginTop: '5px' }}>
                                 <Link href='/users'>
-                                    <a className={`rounded block w-full h-full px-4 py-2 text-lg cursor-pointer ${router.route == '/users' ? 'bg-gray-200' : 'hover:bg-gray-100'} transition`}>
+                                    <a className={`rounded block w-full h-full px-4 py-2 text-lg cursor-pointer ${pathName[1] == 'users' ? 'bg-gray-200' : 'hover:bg-gray-100'} transition`}>
                                         <PeopleAlt className='w-[20px] text-gray-700' />
                                         <span className='ml-3'>Users</span>
                                     </a>
@@ -116,7 +118,7 @@ const LeftBar = ({ activeNav, setActiveNav }) => {
                             </MenuItem>
                             <MenuItem sx={{ padding: '0', marginTop: '5px' }}>
                                 <Link href='/courses'>
-                                    <a className={`rounded block w-full h-full px-4 py-2 text-lg cursor-pointer ${router.route == '/courses' ? 'bg-gray-200' : 'hover:bg-gray-100'} transition`}>
+                                    <a className={`rounded block w-full h-full px-4 py-2 text-lg cursor-pointer ${pathName[1] == 'courses' ? 'bg-gray-200' : 'hover:bg-gray-100'} transition`}>
                                         <Class className='w-[20px] text-gray-700' />
                                         <span className='ml-3'>Courses</span>
                                     </a>
@@ -124,7 +126,7 @@ const LeftBar = ({ activeNav, setActiveNav }) => {
                             </MenuItem>
                             <MenuItem sx={{ padding: '0', marginTop: '5px' }} onClick={() => signOut({ redirect: false })}>
                                 {/* <Link href='/login'> */}
-                                <a className={`rounded block w-full h-full px-4 py-2 text-lg cursor-pointer ${router.route == '/login' ? 'bg-gray-200' : 'hover:bg-gray-100'} transition`}>
+                                <a className={`rounded block w-full h-full px-4 py-2 text-lg cursor-pointer transition`}>
                                     <Logout className='w-[20px] text-gray-700' />
                                     <span className='ml-3'>Logout</span>
                                 </a>
