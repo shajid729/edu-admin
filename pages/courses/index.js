@@ -11,6 +11,8 @@ export default function Courses({courses}) {
   const [filter, setFilter] = useState({ class: '', subject: '', value: '' })
   const isMobile = useMediaQuery('(max-width:1000px)')
 
+  console.log(courses);
+
   if (status == 'unauthenticated') {
     router.push('/login')
   }
@@ -101,7 +103,7 @@ export default function Courses({courses}) {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
-  const res =  await fetch("http://localhost:3000/api/course")
+  const res =  await fetch("https://shajid-edu-admin.vercel.app/api/course")
   const data = await res.json()
   
   if (session?.user?.name) {
@@ -124,6 +126,7 @@ export const getServerSideProps = async (context) => {
     }
   }
 }
+
 
 const Class = [
   'HSC',
