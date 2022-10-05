@@ -6,6 +6,11 @@ const CourseSchema = mongoose.Schema({
         required: true,
         trim: true,
     },
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+    },
     class: {
         type: String,
         required: true,
@@ -41,6 +46,7 @@ const CourseSchema = mongoose.Schema({
     timestamps: true,
     versionKey: false
 })
+
 
 const Course = mongoose.models.Course || mongoose.model('Course', CourseSchema)
 

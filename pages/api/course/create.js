@@ -6,10 +6,10 @@ const CreateCourse = async (req, res) => {
 
     if (req.method == 'POST') {
         try {
-            const { playlistId, image, total, subject, subValue, chapter, title, category } = req.body
+            const { playlistId, image, name, total, subject, subValue, chapter, title, category } = req.body
             let course
             if(req.body.role=='admin' || req.body.role =='editor'){
-                const course = await Course.create({ playlistId, image, total, subject, subValue, chapter, title, category, class: req.body.class })
+                course = await Course.create({ playlistId, image, name, total, subject, subValue, chapter, title, category, class: req.body.class })
             }else{
                 course = true
             }
@@ -24,14 +24,14 @@ const CreateCourse = async (req, res) => {
         }
     } else if (req.method == 'PATCH') {
         try {
-            const { id, playlistId, image, total, subject, subValue, chapter, title, category } = req.body
+            const { id, playlistId, image, name, total, subject, subValue, chapter, title, category } = req.body
 
-            const course = await Course.findByIdAndUpdate({ _id: id }, { playlistId, image, total, subject, subValue, chapter, title, category, class: req.body.class })
+            const course = await Course.findByIdAndUpdate({ _id: id }, { playlistId, name, image, total, subject, subValue, chapter, title, category, class: req.body.class })
 
             if (course) {
                 res.status(200).json({ message: "Successfully Updated Course" })
             } else {
-                res.status(400).json({ error: "Failed to create Course" })
+                res.status(400).json({ error: "Failed to update Course" })
             }
         } catch (err) {
             res.status(400).json({ errors: err.message })

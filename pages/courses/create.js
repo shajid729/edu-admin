@@ -16,7 +16,7 @@ export default function Create() {
   const [activeStep, setActiveStep] = useState(0);
   const [playlistId, setPlaylistId] = useState('')
   const [errorPlaylistId, setErrorPlaylistId] = useState("")
-  const [courseData, setCourseData] = useState({ image: '', total: '', class: '', subject: '', subValue: '', chapter: '', title: '', category: '' })
+  const [courseData, setCourseData] = useState({ image: '', total: '', name: '', class: '', subject: '', subValue: '', chapter: '', title: '', category: '' })
   const router = useRouter()
   const YOUTUBE_LINK = 'https://www.googleapis.com/youtube/v3/playlistItems'
   const YOUTUBE_API_KEY = "AIzaSyDdDXDjUrRH7hqkR285glv6a_i02KRGFNk"
@@ -46,9 +46,10 @@ export default function Create() {
       const content = {
         total: data?.items?.length,
         thumb: data?.items[0]?.snippet?.thumbnails.high.url,
-        title: data?.items[0]?.snippet.title
+        title: data?.items[0]?.snippet.title,
+        name: data?.items[0]?.snippet?.channelTitle,
       }
-      setCourseData({ ...courseData, total: content.total, image: content.thumb, title: content.title })
+      setCourseData({ ...courseData, total: content.total, image: content.thumb, name: content.name, title: content.title })
     } else {
       setErrorPlaylistId("Invalid PlaylisId")
     }
@@ -116,6 +117,16 @@ export default function Create() {
                   disabled
                   onChange={(e) => setCourseData({ ...courseData })}
                   value={courseData.image}
+                />
+              </div>
+              <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
+                <TextField
+                  label='Name'
+                  width='100%'
+                  sx={{ width: '100%' }}
+                  disabled
+                  onChange={(e) => setCourseData({ ...courseData })}
+                  value={courseData.name}
                 />
               </div>
               <div className='course_create_autocomplete' style={{ display: 'flex', alignItems: 'flex-end', margin: '2rem auto' }}>
@@ -239,29 +250,30 @@ const Category = [
 ]
 
 const HSubject = [
-  { label: 'Physics 1st', value: 'phsics1' },
-  { label: 'Physics 2nd', value: 'phsics2' },
-  { label: 'Chemistry 1st', value: 'chemestry1' },
-  { label: 'Chemistry 2nd', value: 'chemestry2' },
+  { label: 'Physics 1st', value: 'physics1' },
+  { label: 'Physics 2nd', value: 'physics2' },
+  { label: 'Chemistry 1st', value: 'chemistry1' },
+  { label: 'Chemistry 2nd', value: 'chemistry2' },
   { label: 'Higher Math 1st', value: 'hmath1' },
   { label: 'Higher Math 2nd', value: 'hmath2' },
-  { label: 'Physics 1st', value: 'phsics1' },
-  { label: 'Physics 2nd', value: 'phsics2' },
-  { label: 'Chemistry 1st', value: 'chemestry1' },
-  { label: 'Chemistry 2nd', value: 'chemestry2' },
-  { label: 'Higher Math 1st', value: 'hmath1' },
-  { label: 'Higher Math 2nd', value: 'hmath2' },
-  { label: 'Physics 1st', value: 'phsics1' },
-  { label: 'Physics 2nd', value: 'phsics2' },
-  { label: 'Chemistry 1st', value: 'chemestry1' },
-  { label: 'Chemistry 2nd', value: 'chemestry2' },
-  { label: 'Higher Math 1st', value: 'hmath1' },
-  { label: 'Higher Math 2nd', value: 'hmath2' },
+  { label: 'Biology 1st', value: 'biology1' },
+  { label: 'Biology 2nd', value: 'biology2' },
+  { label: 'ICT', value: 'ict' },
+  { label: 'Bangla 1st', value: 'bangla1' },
+  { label: 'Bangla 2nd', value: 'bangla2' },
+  { label: 'English 1st', value: 'english1' },
+  { label: 'English 2nd', value: 'english2' },
 ]
 
 const SSubject = [
-  { label: 'Physics', value: 'phsics' },
-  { label: 'Chemistry', value: 'chemestry' },
+  { label: 'Physics', value: 'physics' },
+  { label: 'Chemistry', value: 'chemistry' },
   { label: 'Math', value: 'math' },
   { label: 'Higher Math', value: 'hmath' },
+  { label: 'Biology', value: 'biology' },
+  { label: 'ICT', value: 'ict' },
+  { label: 'Bangla 1st', value: 'bangla1' },
+  { label: 'Bangla 2nd', value: 'bangla2' },
+  { label: 'English 1st', value: 'english1' },
+  { label: 'English 2nd', value: 'english2' },
 ]

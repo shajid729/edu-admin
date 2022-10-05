@@ -3,9 +3,8 @@ import { Autocomplete, Box, Button, IconButton, Paper, Table, TableBody, TableCe
 import { getSession, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import Moment from 'react-moment';
 
-export default function Courses({courses}) {
+export default function Courses({ courses }) {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [filter, setFilter] = useState({ class: '', subject: '', value: '' })
@@ -50,12 +49,12 @@ export default function Courses({courses}) {
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">Image</TableCell>
-                    <TableCell align="center">Title</TableCell>
+                    <TableCell align="center">Name</TableCell>
                     <TableCell align="center">Class</TableCell>
                     <TableCell align="center">Subject</TableCell>
                     <TableCell align="center">Chapter</TableCell>
+                    <TableCell align="center">Toal</TableCell>
                     <TableCell align="center">Category</TableCell>
-                    <TableCell align="center">Date</TableCell>
                     <TableCell align="center">Activity</TableCell>
                   </TableRow>
                 </TableHead>
@@ -73,12 +72,12 @@ export default function Courses({courses}) {
                           />
                         </Box>
                       </TableCell>
-                      <TableCell align="center" sx={{ maxWidth: '300px' }}>{row.title}</TableCell>
+                      <TableCell align="center" sx={{ maxWidth: '300px' }}>{row.name}</TableCell>
                       <TableCell align="center">{row.class}</TableCell>
                       <TableCell align="center">{row.subject}</TableCell>
                       <TableCell align="center">{row.chapter}</TableCell>
+                      <TableCell align="center">{row.total}</TableCell>
                       <TableCell align="center">{row.category}</TableCell>
-                      <TableCell align="center"><Moment fromNow>{row.createdAt}</Moment></TableCell>
                       <TableCell align="center">
                         <IconButton>
                           <Edit />
@@ -103,12 +102,12 @@ export default function Courses({courses}) {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
-  const res =  await fetch("https://shajid-edu-admin.vercel.app/api/course")
+  const res = await fetch("http://localhost:3000/api/course")
   const data = await res.json()
-  
+
   if (session?.user?.name) {
     return {
-      props: {courses:data.message}
+      props: { courses: data.message }
     }
   } else if (session?.user?.name && session?.user.role == 'user') {
     return {
