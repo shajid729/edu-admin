@@ -4,7 +4,7 @@ import Course from '../../../models/courseSchema'
 const GetCourse = async (req, res) => {
     await dbConnect()
 
-    try {
+    try { 
         const { subject, chapter } = req.query
         if (req.query.class && subject && chapter) {
             const courses = await Course.find({ class: req.query.class.toUpperCase(), subValue: subject, chapter })
