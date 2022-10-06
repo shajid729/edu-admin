@@ -20,7 +20,7 @@ const GetCourse = async (req, res) => {
         }
     } catch (err) {
         res.status(400).json({ errors: err.message })
-    }
+    } 
 }
 
 export default GetCourse
