@@ -169,7 +169,7 @@ export default EditCourse
 
 
 export const getServerSideProps = async (ctx) => {
-    const res = await fetch(`http://localhost:3000/api/course?id=${ctx?.query.courseId}`)
+    const res = await fetch(`https://shajid-edu-admin.vercel.app/api/course?id=${ctx?.query.courseId}`)
     const data = await res.json()
 
     if (res.status == 200) {
