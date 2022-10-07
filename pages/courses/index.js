@@ -21,7 +21,6 @@ export default function Courses({ courses }) {
     if (res.ok) {
       toast.dismiss(toastId)
       toast.success(data.message)
-      router.push('/courses')
     } else {
       toast.dismiss(toastId)
       toast.error(data.error)
@@ -123,7 +122,7 @@ export default function Courses({ courses }) {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
-  const res = await fetch("http://localhost:3000/api/course")
+  const res = await fetch("https://shajid-edu-admin.vercel.app/api/course")
   const data = await res.json()
 
   if (session?.user?.name) {
