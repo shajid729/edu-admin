@@ -8,9 +8,9 @@ const CreateCourse = async (req, res) => {
         try {
             const { playlistId, image, name, total, subject, subValue, chapter, title, category } = req.body
             let course
-            if(req.body.role=='admin' || req.body.role =='editor'){
+            if (req.body.role == 'admin' || req.body.role == 'editor') {
                 course = await Course.create({ playlistId, image, name, total, subject, subValue, chapter, title, category, class: req.body.class })
-            }else{
+            } else {
                 course = true
             }
 
@@ -33,6 +33,16 @@ const CreateCourse = async (req, res) => {
             } else {
                 res.status(400).json({ error: "Failed to update Course" })
             }
+        } catch (err) {
+            res.status(400).json({ errors: err.message })
+        }
+    } else if (req.method == 'DELETE') {
+        try {
+            const { id } = req.query
+            console.log(id);
+            const course = await Course.findByIdAndDelete(id)
+            
+            res.status(200).json({ message: "Deleted Course" })
         } catch (err) {
             res.status(400).json({ errors: err.message })
         }

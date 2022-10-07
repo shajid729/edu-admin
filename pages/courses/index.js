@@ -1,8 +1,10 @@
-import { Edit } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 import { Autocomplete, Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, useMediaQuery } from '@mui/material';
 import { getSession, useSession } from 'next-auth/react'
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function Courses({ courses }) {
   const router = useRouter()
@@ -10,7 +12,21 @@ export default function Courses({ courses }) {
   const [filter, setFilter] = useState({ class: '', subject: '', value: '' })
   const isMobile = useMediaQuery('(max-width:1000px)')
 
-  console.log(courses);
+  const handleDeleteCourse = async (id) => {
+    const toastId = toast.loading('Loading...')
+    const res = await fetch(`/api/course/create?id=${id}`, {
+      method: 'DELETE'
+    })
+    const data = await res.json()
+    if (res.ok) {
+      toast.dismiss(toastId)
+      toast.success(data.message)
+      router.push('/courses')
+    } else {
+      toast.dismiss(toastId)
+      toast.error(data.error)
+    }
+  }
 
   if (status == 'unauthenticated') {
     router.push('/login')
@@ -59,28 +75,33 @@ export default function Courses({ courses }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {courses.map((row) => (
+                  {courses.map((course) => (
                     <TableRow
-                      key={row.name}
+                      key={course._id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell align="center">
                         <Box className='w-[130px] flex justify-center items-center border  overflow-hidden max-h-full aspect-video bg-gray-500 rounded mx-auto'>
                           <img
-                            src={row.image}
-                            alt={row.title}
+                            src={course.image}
+                            alt={course.title}
                           />
                         </Box>
                       </TableCell>
-                      <TableCell align="center" sx={{ maxWidth: '300px' }}>{row.name}</TableCell>
-                      <TableCell align="center">{row.class}</TableCell>
-                      <TableCell align="center">{row.subject}</TableCell>
-                      <TableCell align="center">{row.chapter}</TableCell>
-                      <TableCell align="center">{row.total}</TableCell>
-                      <TableCell align="center">{row.category}</TableCell>
+                      <TableCell align="center">{course.name}</TableCell>
+                      <TableCell align="center">{course.class}</TableCell>
+                      <TableCell align="center">{course.subject}</TableCell>
+                      <TableCell align="center">{course.chapter}</TableCell>
+                      <TableCell align="center">{course.total}</TableCell>
+                      <TableCell align="center">{course.category}</TableCell>
                       <TableCell align="center">
-                        <IconButton>
-                          <Edit />
+                        <Link href={`/courses/${course._id}`}>
+                          <IconButton color='primary'>
+                            <Edit />
+                          </IconButton>
+                        </Link>
+                        <IconButton onClick={() => handleDeleteCourse(course._id)} color='error'>
+                          <Delete className='text-red-500' />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -102,7 +123,7 @@ export default function Courses({ courses }) {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
-  const res = await fetch("https://shajid-edu-admin.vercel.app//api/course")
+  const res = await fetch("http://localhost:3000/api/course")
   const data = await res.json()
 
   if (session?.user?.name) {

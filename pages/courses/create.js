@@ -27,7 +27,7 @@ export default function Create() {
 
   const handleReset = () => {
     setTimeout(() => {
-      setCourseData({ image: '', total: '', class: '', subject: '', subValue: '', category: '' })
+      setCourseData({ image: '', total: '', name: '', class: '', subject: '', subValue: '', chapter: '', title: '', category: '' })
       setPlaylistId('')
     }, 1500)
   }
@@ -124,8 +124,7 @@ export default function Create() {
                   label='Name'
                   width='100%'
                   sx={{ width: '100%' }}
-                  disabled
-                  onChange={(e) => setCourseData({ ...courseData })}
+                  onChange={(e) => setCourseData({ ...courseData, name: e.target.value })}
                   value={courseData.name}
                 />
               </div>
