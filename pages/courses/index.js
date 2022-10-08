@@ -3,18 +3,27 @@ import { Autocomplete, Box, Button, IconButton, Paper, Table, TableBody, TableCe
 import { getSession, useSession } from 'next-auth/react'
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-export default function Courses({ courses }) {
+export default function Courses({ courses:courseData }) {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [filter, setFilter] = useState({ class: '', subject: '', value: '' })
   const isMobile = useMediaQuery('(max-width:1000px)')
+  const [courses, setCourses] = useState(courseData)
+  
+  useEffect(()=>{
+    if(filter.value){
+      setCourses(courseData.filter(e=>e.subValue==filter.value));
+    }else{
+      setCourses(courseData)
+    }
+  },[filter.value])
 
   const handleDeleteCourse = async (id) => {
     const toastId = toast.loading('Loading...')
-    const res = await fetch(`/api/course/create?id=${id}`, {
+    const res = await fetch(`/api/course/create?id=${id}&role=${session?.user?.role}`, {
       method: 'DELETE'
     })
     const data = await res.json()
@@ -30,6 +39,7 @@ export default function Courses({ courses }) {
   if (status == 'unauthenticated') {
     router.push('/login')
   }
+
 
   else if (status == 'authenticated' && session?.user?.name) {
     return (
@@ -153,12 +163,19 @@ const Class = [
 ]
 
 const HSubject = [
-  { label: 'Physics 1st', value: 'phsics1' },
-  { label: 'Physics 2nd', value: 'phsics2' },
-  { label: 'Chemistry 1st', value: 'chemestry1' },
-  { label: 'Chemistry 2nd', value: 'chemestry2' },
+  { label: 'Physics 1st', value: 'physics1' },
+  { label: 'Physics 2nd', value: 'physics2' },
+  { label: 'Chemistry 1st', value: 'chemistry1' },
+  { label: 'Chemistry 2nd', value: 'chemistry2' },
   { label: 'Higher Math 1st', value: 'hmath1' },
   { label: 'Higher Math 2nd', value: 'hmath2' },
+  { label: 'Biology 1st', value: 'biology1' },
+  { label: 'Biology 2nd', value: 'biology2' },
+  { label: 'ICT', value: 'ict' },
+  { label: 'Bangla 1st', value: 'bangla1' },
+  { label: 'Bangla 2nd', value: 'bangla2' },
+  { label: 'English 1st', value: 'english1' },
+  { label: 'English 2nd', value: 'english2' },
 ]
 
 const SSubject = [
@@ -166,4 +183,10 @@ const SSubject = [
   { label: 'Chemistry', value: 'chemestry' },
   { label: 'Math', value: 'math' },
   { label: 'Higher Math', value: 'hmath' },
+  { label: 'Biology', value: 'biology' },
+  { label: 'ICT', value: 'ict' },
+  { label: 'Bangla 1st', value: 'bangla1' },
+  { label: 'Bangla 2nd', value: 'bangla2' },
+  { label: 'English 1st', value: 'english1' },
+  { label: 'English 2nd', value: 'english2' },
 ]

@@ -26,7 +26,12 @@ const CreateCourse = async (req, res) => {
         try {
             const { id, playlistId, image, name, total, subject, subValue, chapter, title, category } = req.body
 
-            const course = await Course.findByIdAndUpdate({ _id: id }, { playlistId, name, image, total, subject, subValue, chapter, title, category, class: req.body.class })
+            let course
+            if(req.body.role=='admin'  || req.body.role=='editor'){
+                course = await Course.findByIdAndUpdate({ _id: id }, { playlistId, name, image, total, subject, subValue, chapter, title, category, class: req.body.class })
+            }else{
+                course = true
+            }
 
             if (course) {
                 res.status(200).json({ message: "Successfully Updated Course" })
@@ -39,8 +44,12 @@ const CreateCourse = async (req, res) => {
     } else if (req.method == 'DELETE') {
         try {
             const { id } = req.query
-            console.log(id);
-            const course = await Course.findByIdAndDelete(id)
+            
+            if(req.query.role == 'admin' || req.query.role=='editor'){
+                const course = await Course.findByIdAndDelete(id)
+            }else{
+                const course = true;
+            }
             
             res.status(200).json({ message: "Deleted Course" })
         } catch (err) {
