@@ -1,0 +1,20 @@
+{
+    "functions": {
+      "pages/api/create/index.js": {
+        "memory": 1024,
+        "maxDuration": 30
+      },
+      "pages/api/create/create.js": {
+        "memory": 1024,
+        "maxDuration": 30
+      },
+      "pages/api/users/index.js": {
+        "memory": 1024,
+        "maxDuration": 30
+      },
+      "pages/api/wait/index.js": {
+        "memory": 1024,
+        "maxDuration": 30
+      }
+    }
+  }
