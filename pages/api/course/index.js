@@ -32,4 +32,4 @@ const GetCourse = async (req, res) => {
     }
 }
 
-export default GetCourse
+module.exports = GetCourse

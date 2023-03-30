@@ -27,9 +27,9 @@ const GetUser = async (req, res) => {
         } catch (err) {
             res.status(400).json({ errors: err.message })
         }
-    }else{
-        res.status(500).json({message: "Invalid Request"})
     }
+    res.status(500).json({message: "Invalid Request"})
+    
 }
 
-export default GetUser
+module.exports = GetUser
