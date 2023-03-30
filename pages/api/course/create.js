@@ -60,4 +60,4 @@ const CreateCourse = async (req, res) => {
     }
 }
 
-module.exports = CreateCourse
+export default CreateCourse

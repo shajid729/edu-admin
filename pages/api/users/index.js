@@ -32,4 +32,4 @@ const GetUser = async (req, res) => {
     
 }
 
-module.exports = GetUser
+export default GetUser

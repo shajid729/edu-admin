@@ -18,4 +18,4 @@ const Wait = async (req, res) => {
     }
 }
 
-module.exports = Wait
+export default Wait
