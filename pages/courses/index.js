@@ -132,7 +132,7 @@ export default function Courses({ courses:courseData }) {
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
-  const res = await fetch("https://shajid-edu-admin.vercel.app/api/course")
+  const res = await fetch(`${process.env.CLIENT_URL}/api/course`)
   const data = await res.json()
 
   if (session?.user?.name) {
